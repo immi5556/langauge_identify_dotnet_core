@@ -1,0 +1,781 @@
+﻿@{
+    Layout = null;
+    List<Immanuel.Core.Language.Models.Owner> owns = ViewBag.LstItems as List<Immanuel.Core.Language.Models.Owner>;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Free online - Language Detector</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <meta name="MobileOptimized" content="width" />
+    <meta name="description" content="Free online API for Text Language Detection" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <META NAME="ROBOTS" CONTENT="All, index, follow">
+    <meta name="revisit-after" content="7 days">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <META NAME="author" CONTENT="Immanuel">
+    <meta name="keywords" content="Language Detector, Language Identifier, Detect language from text, Free langauge detect http Api, free language api, n-gram algorithm" />
+    <script src="~/js/jquery.min.js"></script>
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Patrick+Hand" rel="stylesheet">
+    <style>
+        .rate-result {
+            background-color: cadetblue;
+            border: 1px red dashed;
+            border-radius: 8px;
+            min-width: 200px;
+        }
+
+        #lang-prof td {
+            border: 2px dashed;
+        }
+
+        input[type=email] {
+            width: 250px;
+            height: 30px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.6);
+            border-radius: 2px;
+            color: #fff;
+            font-family: 'Exo', sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            padding: 4px;
+            text-align: center;
+        }
+
+        input[type=text] {
+            width: 350px;
+            height: 30px;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.6);
+            border-radius: 2px;
+            color: #fff;
+            font-family: 'Exo', sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            padding: 4px;
+            text-align: center;
+        }
+
+            input[type=text]:focus {
+                outline: none;
+                border: 1px solid rgba(255,255,255,0.9);
+            }
+
+        button {
+            width: 260px;
+            height: 35px;
+            background: #fff;
+            border: 1px solid #fff;
+            cursor: pointer;
+            border-radius: 2px;
+            color: #a18d6c;
+            font-family: 'Exo', sans-serif;
+            font-size: 16px;
+            font-weight: 400;
+            padding: 6px;
+            margin-top: 10px;
+        }
+
+            button:hover {
+                opacity: 0.8;
+            }
+
+            button:active {
+                opacity: 0.6;
+            }
+
+            button:focus {
+                outline: none;
+            }
+
+        #tbllst tr:nth-child(odd) {
+            background-color: #47a574;
+        }
+
+        #tbllst tr:nth-child(even) {
+            background-color: #286d49;
+        }
+
+        .selected-prof-lng {
+            background-color: #8BC34A;
+        }
+
+        .numRating {
+            display: inline-block;
+            position: relative;
+            height: 24px;
+            background: url('img/icon_number_widget.png') no-repeat 0 0;
+            vertical-align: bottom;
+        }
+
+            .numRating div {
+                float: left;
+                position: relative;
+                height: 24px;
+            }
+
+            .numRating input {
+                position: relative;
+                z-index: 1;
+                width: 24px;
+                height: 24px;
+                margin: 0;
+                padding: 0;
+                opacity: 0;
+            }
+
+            .numRating label {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 24px;
+            }
+
+            .numRating span {
+                display: none;
+            }
+
+            .numRating input:checked + label,
+            .numRating:hover input:checked:hover + label {
+                background: url('img/icon_number_widget.png') repeat-x 0 -24px;
+            }
+
+            .numRating:hover input:checked + label {
+                background: transparent;
+            }
+
+            .numRating:hover input:hover + label {
+                background: url('img/icon_number_widget.png') repeat-x 0 -48px;
+            }
+    </style>
+</head>
+<body style="width:100%;height:100%;text-align:center;background-color:#b99e54;margin:0;padding-top:30px;color:floralwhite;font-family: 'Patrick Hand', cursive;">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111329650-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-111329650-1');
+    </script>
+    <script type="text/javascript">
+        var appkeyval = '2tv9lmtu', appitemsitekey = 'lang-ident-count', appitemmodelkey = 'lang-model-count';
+        var getValue = function (appkey, itemkey) {
+            $.ajax({
+                type: "GET",
+                url: "https://keyvalue.immanuel.co/api/KeyVal/GetValue/" + appkey + "/" + itemkey,
+                contentType: false,
+                processData: false
+            }).done(function (data) {
+                if (itemkey == appitemsitekey)
+                    $("#sitecnt").text(data);
+                else
+                    $("#modelcnt").text(data);
+            }).fail(function (err) {
+
+            });
+        }
+        var updateValue = function (appkey, itemkey, itemval) {
+            $.ajax({
+                type: "POST",
+                url: "https://keyvalue.immanuel.co/api/KeyVal/UpdateValue/" + appkey + "/" + itemkey + "/" + itemval,
+                contentType: false,
+                processData: false
+            }).done(function (data) {
+
+            }).fail(function (err) {
+
+            });
+        }
+        var actOnValue = function (appkey, itemkey, action) {
+            $.ajax({
+                type: "POST",
+                url: "https://keyvalue.immanuel.co/api/KeyVal/ActOnValue/" + appkey + "/" + itemkey + "/" + action,
+                contentType: false,
+                processData: false
+            }).done(function (data) {
+
+            }).fail(function (err) {
+
+            });
+        }
+    </script>
+    <script>
+        var utcToLocal = function (tme) {
+            var date = new Date(tme);
+            return date.toString();
+        }
+    </script>
+
+    <div style="position:fixed;top:10px;right:15px;text-align:center;border:2px dashed green; z-index: 101; background-color: cadetblue;">
+        <span style="background-color:#447171;display:inline-block;width:70px;padding:5px;">Visits</span><br>
+        <span id="sitecnt" style="color:white;font-size:large;"></span>
+    </div>
+
+    <div style="position:fixed;top:10px;left:15px;text-align:center;border:2px dashed green; z-index: 101; background-color: cadetblue;">
+        <span style="background-color:#447171;display:inline-block;width:70px;padding:5px;">Models</span><br>
+        <span id="modelcnt" style="color:white;font-size:large;"></span>
+    </div>
+
+    <div class="land-page" style="padding-bottom:20px;">
+        <div>
+            <h2 style="font-family: 'Bradley Hand ITC';">Language Identifier</h2>
+        </div>
+        <div>
+            <textarea id="inpTxt" style="width:55%;border-radius:5px;margin-top:20px;" rows="8" placeholder="&nbsp;&nbsp;Enter Text to detect language"></textarea>
+            <br />
+            (<span id="chrcount">1000</span> chars remaining)
+        </div>
+        <div style="margin-top:10px;font-weight:bold;">
+            Supports English (en-EN), Tamil (ta-TA) , Telugu (te-TE), Hindi (hi-HI)
+            <br />(Soon other languages will be included)
+        </div>
+        <br />
+        <div>
+            <button style="height:30px;width:60px;border-radius:5px;" id="btnChk">Check</button>
+        </div>
+        <br />
+        <div style="text-align:center;align-content:center;">
+            <table id="restresult" class="rate-result" style="margin-left:auto;margin-right:auto;"></table>
+        </div>
+        <br /><br />
+        <div>
+            <h2>Developer Api</h2>
+            <span>GET: https://language-identifier.immanuel.co/language/identify/{text to be validated} </span><br />
+            <span>POST: https://language-identifier.immanuel.co/language/identify, with FormData - text = {to be validated} </span>
+        </div>
+    </div>
+
+    @*<div class="train-pop" style="position:fixed;width:90%;height:90%; margin: auto;background-color:#64672a;top:5%; left:5%;border-radius:7px;overflow:auto;display:none;">*@
+    <div class="train-pop" style="background-color:#64672a;padding-bottom:15px;">
+        <div style="padding-top:15px;">
+            <h2 style="font-family: 'Bradley Hand ITC';">Build Your Model</h2>
+        </div>
+        <form id="train-frm" method="post" action="">
+            <table id="lang-prof" style="width:100%;">
+                <tr>
+                    <td colspan="4" style="margin-top:15px;border:none;">
+                        <div style="min-height:150px;margin-top:35px;">
+                            <table style="margin: 0 auto;" align="center" width="70%">
+                                <thead>
+                                    <tr>
+                                        <td>Category</td>
+                                        <td>Training Data File</td>
+                                        <td width="60px;">
+                                            action
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbdy-lblcont" data-radcnt="0">
+                                    <tr style="display:none">
+                                        <td>
+                                            <input type="text" name="inptlabel" placeholder="label" />
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <input type="radio" name="inptdata" value="filesrc" /> <label>Upload Training Data</label>
+                                                <input type="radio" name="inptdata" value="textsrc" /> <label>Enter Training Data</label>
+                                                <br />
+                                                <br />
+                                                <input class="lbl-upl" name="uplfile" type="file" style="display:none;" />
+                                                <textarea class="lbl-txt" rows="4" name="upltext" style="display:none;min-width:300px;"></textarea>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <a class="rem-cont" style="text-decoration:none;cursor:pointer;">Remove</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <br />
+                            <div style="min-height:30px;margin-top:10px;">
+                                <button id="addl-lbl">Additional Label</button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" style="border:none;">
+                        <a href="javascript:void(0);" style="text-decoration:none;color:cornsilk;" id="shw-adv">
+                            Show Advanced Settings
+                        </a>
+                    </td>
+                </tr>
+                <tr class="adv-prof" style="display:none">
+                    <td>type</td>
+                    <td>min gram</td>
+                    <td>max gram</td>
+                    <td>case sensitive</td>
+                </tr>
+                <tr class="adv-prof" style="display:none">
+                    <td>
+                        <select name="ptype">
+                            <option selected>char</option>
+                            <option>word</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="mingram">
+                            <option value="1" selected>1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="maxgram">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5" selected>5</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select name="casesense">
+                            <option value="ncf" selected>ncf (no-case-folding)</option>
+                            <option value="tlc">tlc (to-lower-case)</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <br />
+
+            <div id="tags">
+                @*<span class="tag"><span class="close">&times;</span>such tage</span>
+                    <span class="tag"><span class="close">&times;</span>so color</span>
+                    <span class="tag"><span class="close">&times;</span>many type</span>
+                    <span class="tag"><span class="close">&times;</span>wow</span>*@
+                <input id="tag-typer" type="text" placeholder="Add tag..." />
+
+            </div>
+            <br />
+            <input type="text" name="ccrprofname" id="ccrprofname" placeholder="Name of the profile" />
+            <br />
+            <br />
+
+            <input type="checkbox" value="checked" name="checkprivate">
+            <label>Private</label>
+            <input type="email" id="yemail" name="useremail" placeholder="Your Email" style="margin-left:20px;" />
+            <br /><br />
+            <button type="submit" id="create-prof">Train &amp; Create Profile</button>
+        </form>
+        <img class="clse-icon" src="~/img/close-button.png" width="45" style="position:absolute;top:10px;right:10px;display:none;" />
+    </div>
+
+    <div style="background-color:#416741;padding-bottom:15px;min-height:200px;">
+        <div style="padding-top:15px;">
+            <h2 style="font-family: 'Bradley Hand ITC';">Test Your Model</h2>
+        </div>
+        <div style="display: flex;vertical-align: middle;text-align: center;justify-content: center;">
+            <table style="display:inline;" id="tbllst">
+                @foreach (var v1 in owns)
+                {
+                    @foreach (var v in v1.langProfiles)
+                    {
+
+                        <tr style="">
+                            <td class="lang-prf-l" style="padding:10px;min-width:200px;text-align:left;">
+                                <div style="display:inline-block; width:100px;">Model Name: </div>@v.ProfileName <br />
+                                <div style="display:inline-block; width:100px;">
+                                    Created By:
+                                </div>@v1.Email <br />
+                                <div style="display:inline-block; width:100px;">Created At: </div><span class="cvrt-utc"> @v.CreatedAt </span><br />
+                                <div style="display:none; width:100px;">Url: </div><a style="text-decoration:none;color:white;display:none;" href="language/profile/@v1.DosName/@System.IO.Path.GetFileName(@v.Path)">url</a>
+                                <div style="display:inline-block; width:100px;">Tags: </div>
+                                [
+                                @foreach (var v2 in v.Tags)
+                                {
+                                    @v2
+                                }
+                                ]
+                                <br />
+                                <div class="input-group url-copy-me" style="display:none;">
+                                    <input class="foo" type="text" value="language/profile/@v1.DosName/@System.IO.Path.GetFileName(@v.Path)">
+                                    <span class="input-group-button">
+                                        <button style="display:inline-block;width:30px;" class="btn-urlcopy" type="button" data-clipboard-demo="" data-clipboard-target="#foo">
+                                            <img class="clippy" src="~/img/clippy.svg" width="13" alt="Copy to clipboard">
+                                        </button>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+            <div style="display:inline;margin-left:70px;margin-top:auto;margin-bottom:auto;">
+                <div id="cur-lng-select" style="background-color: #8BC34A;padding: 10px;display:none;">
+                    <p style="text-align:left;"></p>
+                    <textarea id="cust-test-text" placeholder="Enter text to test with the selected model" rows="3" style="min-width:350px;"></textarea> <br />
+                    <button id="cust-test" style="width:70px;height:20px;font-size:large;padding:0px;">Test</button>
+                </div>
+                <div id="loc-test-rest" style="background-color:darkcyan;display:none;">
+                    <div style="padding-top:10px;padding-bottom:15px;">Result: <span class="rest-cal"></span></div>
+                    <div style="padding-bottom:5px;">
+                        Are You Satisfied? 1 -> Worst, 5 -> Best <br />
+                    </div>
+                    <div class="numRating" style="">
+                        <div>
+                            <div>
+                                <div>
+                                    <div>
+                                        <input id="rating1" type="radio" name="rating" value="1">
+                                        <label for="rating1"><span>1</span></label>
+                                    </div>
+                                    <input id="rating2" type="radio" name="rating" value="2">
+                                    <label for="rating2"><span>2</span></label>
+                                </div>
+                                <input id="rating3" type="radio" name="rating" value="3">
+                                <label for="rating3"><span>3</span></label>
+                            </div>
+                            <input id="rating4" type="radio" name="rating" value="4">
+                            <label for="rating4"><span>4</span></label>
+                        </div>
+                        <input id="rating5" type="radio" name="rating" value="5">
+                        <label for="rating5"><span>5</span></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="~/js/signalr.min.js"></script>
+    <script>
+        document.getElementById('btnChk').onclick = function () {
+            var tblrest = document.getElementById("restresult");
+            tblrest.innerHTML = "";
+            validate();
+        };
+
+        var validate = function () {
+            var formData = new FormData();
+            formData.append('text', document.getElementById('inpTxt').value);
+            var request = new XMLHttpRequest();
+            request.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    if (!this.response || !this.response.length)
+                        return;
+                    console.log(this.response);
+                    var rttbl = document.getElementById("restresult");
+                    var trnode = document.createElement("tr");
+                    trnode.style.fontWeight = "bolder";
+                    trnode.style.textDecoration = "underline";
+                    node = document.createElement("td");
+                    node.colSpan = 2;
+                    textnode = document.createTextNode("Languages");
+                    node.appendChild(textnode);
+                    trnode.appendChild(node);
+                    rttbl.appendChild(trnode);
+                    this.response.forEach(function (itm) {
+                        trnode = document.createElement("tr");
+                        node = document.createElement("td");
+                        textnode = document.createTextNode(itm.lang);
+                        node.appendChild(textnode);
+                        trnode.appendChild(node);
+                        node = document.createElement("td");
+                        textnode = document.createTextNode(itm.count + ' Words');
+                        node.appendChild(textnode);
+                        trnode.appendChild(node);
+                        rttbl.appendChild(trnode);
+                    });
+                }
+            };
+            //request.open('POST', 'https://vulgarity-validator.immanuel.co/Profane/Check');
+            request.open('POST', '/language/identify');
+            request.responseType = 'json';
+            request.send(formData);
+        }
+        var totchrcnt = 500;
+        var chrcnt = document.getElementById("chrcount");
+        chrcnt.innerText = totchrcnt;
+
+        document.getElementById('inpTxt').onkeyup = function (evt) {
+            if ((evt.target.value || '').length > totchrcnt) {
+                evt.preventDefault();
+                evt.target.value = evt.target.value.substring(0, totchrcnt);
+            }
+            chrcnt.innerText = (totchrcnt - (evt.target.value || '').length);
+        }
+
+        document.getElementById('inpTxt').onkeypress = function (evt) {
+            if ((evt.target.value || '').length > totchrcnt) {
+                evt.preventDefault();
+                return false;
+            }
+            chrcnt.innerText = (totchrcnt - (evt.target.value || '').length);
+        }
+    </script>
+
+    <script>
+        var clientid = '@ViewBag.ConnectionId';
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("/progress")
+            .configureLogging(signalR.LogLevel.Information)
+            .build();
+        document.addEventListener('DOMContentLoaded', function () {
+            async function start() {
+                try {
+                    connection.serverTimeoutInMilliseconds = 120000;
+                    await connection.start();
+                    console.log('connected');
+                    join();
+                } catch (err) {
+                    console.log(err);
+                    setTimeout(() => start(), 5000);
+                }
+            };
+
+            function join() {
+                connection.invoke("join", clientid);
+            }
+
+            connection.on('joined', (msg) => {
+                console.log(msg);
+            });
+
+            var inprog = false;
+            var progressbar = function (pct) {
+                if (inprog)
+                    return;
+                if (prog.value <= 100) {
+                    inprog = true;
+                    setTimeout(function () {
+                        console.log(prog.value);
+                        prog.value = prog.value + pct;
+                        progressbar(pct);
+                    }, 1000);
+                } else {
+                    inprog = false;
+                }
+            };
+
+            connection.on('learningprogress', (prgval, msg, prgfile) => {
+                console.log(prgval, msg, prgfile);
+                prog.value = prgval;
+                document.getElementById("msg_prg").textContent = msg;
+                document.getElementById("file_prg").textContent = prgfile;
+            });
+
+            connection.on('downloadprogress', (prgval, msg, prgfile) => {
+                console.log(prgval, msg, prgfile);
+                document.getElementById("dld-msgg").textContent = prgfile;
+            });
+
+            connection.onclose(async () => {
+                await start();
+            });
+
+            start();
+        });
+    </script>
+
+    <script>
+        var tgcont = $("#tag-typer");
+
+        var populatetag = function () {
+            if (tgcont.val().length > 0) {
+                $("<span class='tag' style='display:none'><span class='close'>&times;</span>" + tgcont.val() + " </span>").insertBefore(tgcont).fadeIn(100);
+                tgcont.val("");
+            }
+        }
+
+        tgcont.on("blur", function () {
+            event.preventDefault();
+            populatetag()
+        });
+
+        $("#tag-typer").keypress(function (event) {
+            var key = event.which;
+            if (key == 13 || key == 44) {
+                event.preventDefault();
+                populatetag()
+                //var tag = tgcont.val();
+                //if (tag.length > 0) {
+                //$("<span class='tag' style='display:none'><span class='close'>&times;</span>" + tag + " </span>").insertBefore(this).fadeIn(100);
+                //$(this).val("");
+                //}
+            }
+        });
+
+        $("#tags").on("click", ".close", function () {
+            $(this).parent("span").fadeOut(100);
+        });
+
+        // new ClipboardJS('.btn-urlcopy');
+
+        $(document).on("click", ".btn-urlcopy", function () {
+            $(this).closest(".url-copy-me").find(".foo").select();
+            //copyText.select();
+            document.execCommand("copy");
+        });
+
+    </script>
+
+    <script>
+        $(document).on("change", "input[type=radio]", function (evt) {
+            if ($(this).attr("name") == "rating") {
+                evt.preventDefault();
+                return false;
+            }
+            console.log($(this).val());
+            if ($(this).val() == 'textsrc') {
+                $(this).closest("tr").find(".lbl-txt").css("display", "");
+                $(this).closest("tr").find(".lbl-upl").css("display", "none");
+            }
+            if ($(this).val() == 'filesrc') {
+                $(this).closest("tr").find(".lbl-upl").css("display", "");
+                $(this).closest("tr").find(".lbl-txt").css("display", "none");
+            }
+        });
+
+        $("#shw-adv").on("click", function () {
+            $(".adv-prof").toggle('slow');
+        });
+
+        $("#addl-lbl").on("click", function (evt) {
+            evt.preventDefault();
+            console.log($("#tbdy-lblcont").find("tr")[0].innerHTML);
+            var ii = parseInt($("#tbdy-lblcont").attr("data-radcnt"));
+            var tt = $("<tr data-idxcnt=" + (++ii) + ">" + $("#tbdy-lblcont").find("tr")[0].innerHTML + "</tr>");
+            $("#tbdy-lblcont").attr("data-radcnt", ii);
+            tt.find('input[type=radio][name=inptdata]').attr("name", "inptdata" + ii);
+            tt.find('input[type=text][name=inptlabel]').attr("name", "inptlabel" + ii);
+            tt.find('input[type=file][name=uplfile]').attr("name", "uplfile" + ii);
+            tt.find('textarea[name=upltext]').attr("name", "upltext" + ii);
+            $("#tbdy-lblcont").append(tt);
+        });
+
+        $(document).on("click", ".rem-cont", function () {
+            $(this).closest("tr").remove()
+        });
+
+        var pflname = document.getElementById("ccrprofname");
+        pflname.onkeypress = function () {
+            pflname.style.border = "";
+        }
+
+        var yemai = document.getElementById("yemail");
+        yemai.onkeypress = function () {
+            yemai.style.border = "";
+        }
+
+        var validatecreateprof = function () {
+            if (!pflname.value) {
+                pflname.style.border = "2px solid red";
+                return false;
+            }
+            if (!yemai.value) {
+                yemai.style.border = "2px solid red";
+                return false;
+            }
+            return true;
+        }
+
+        $(document).on("click", "#create-prof", function (evt) {
+            evt.preventDefault();
+            actOnValue(appkeyval, appitemmodelkey, 'Increment');
+            if (!validatecreateprof()) {
+                return;
+            }
+
+            var form = new FormData(document.getElementById("train-frm"));
+            var arridx = [], atttgs = [];
+            $("#tbdy-lblcont tr:visible").each(function (idx, itm) {
+                arridx.push($(itm).attr("data-idxcnt"));
+            });
+            form.append("keyidxs", JSON.stringify(arridx));
+            $("#tags span.tag").each(function (idx, itm) {
+                atttgs.push($(itm).text().replace('×', ''));
+            });
+            form.append("tags", JSON.stringify(atttgs));
+
+            $.ajax({
+                url: '/language/learn',
+                data: form,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                success: function (data) {
+                    var telt = `<tr style="">
+                                    <td class="lang-prf-l" style="padding:10px;min-width:200px;text-align:left;">
+                                        <div style="display:inline-block; width:100px;">Model Name: </div>` + data.langProfiles[0].ProfileName + `<br />
+                                        <div style="display:inline-block; width:100px;">
+                                            Created By:
+                                        </div>` + data.Email + `<br />
+                                        <div style="display:inline-block; width:100px;">Created At: </div><span class="cvrt-utc">` + data.langProfiles[0].CreatedAt + `</span><br />
+                                        <div style="display:none; width:100px;">Url: </div><a style="text-decoration:none;color:white;display:none;" href="language/profile/` + data.DosName + `/` + ((data.langProfiles[0].Path || '').split('/').length ? (data.langProfiles[0].Path || '').split('/').pop() : (data.langProfiles[0].Path || '').split('\\').pop()) + `">url</a>
+                                        <div style="display:inline-block; width:100px;">Tags: </div>
+                                        [` + (data.langProfiles[0].Tags || []).join(', ') + `]
+                                        <br />
+                                        <div class="input-group url-copy-me" style="display:none;">
+                                            <input class="foo" type="text" value="language/profile/` + data.DosName + `/` + ((data.langProfiles[0].Path || '').split('/').length ? (data.langProfiles[0].Path || '').split('/').pop() : (data.langProfiles[0].Path || '').split('\\').pop()) + `">
+                                            <span class="input-group-button">
+                                                <button style="display:inline-block;width:30px;" class="btn-urlcopy" type="button" data-clipboard-demo="" data-clipboard-target="#foo">
+                                                    <img class="clippy" src="/img/clippy.svg" width="13" alt="Copy to clipboard">
+                                                </button>
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>`;
+                    $("#tbllst tr:first").before(telt);
+                    getValue(appkeyval, appitemmodelkey);
+                }
+            });
+        });
+
+        $(".clse-icon").on("click", function () {
+            $(".train-pop").css("display", "none");
+        });
+
+        $(document).on("click", ".lang-prf-l", function () {
+            $(".lang-prf-l").removeClass("selected-prof-lng");
+            $(this).addClass("selected-prof-lng");
+            $("#cust-test-text").val("");
+            $("#loc-test-rest .rest-cal").text("");
+            $("#loc-test-rest").css("display", "none");
+            $(".numRating").html($(".numRating").html());
+            $("#cur-lng-select p").html($(this).html());
+            $("#cur-lng-select").css("display", "");
+            $("#cur-lng-select").find(".url-copy-me .foo").val(window.location.href + $("#cur-lng-select").find(".url-copy-me .foo").val());
+            $("#cur-lng-select").find(".url-copy-me").css("display", "");
+        });
+
+        $(".cvrt-utc").each(function () {
+            $(this).text((utcToLocal($(this).text() + ' UTC')).split('+')[0]);
+        });
+
+        $(document).on("click", "#cust-test", function () {
+            var url = $(this).closest("#cur-lng-select").find("p .url-copy-me .foo").val() + '/' + $("#cust-test-text").val();
+            $.ajax({
+                url: url,
+                processData: false,
+                contentType: false,
+                type: 'GET',
+                success: function (data) {
+                    console.log(data);
+                    $("#loc-test-rest .rest-cal").text(data);
+                    $("#loc-test-rest").css("display", "");
+                }
+            });
+        });
+
+        $(document).on("change", "input[type=radio][name=rating]", function (evt) {
+            console.log("rating : " + evt.target.value);
+        });
+
+    </script>
+    <script>
+        actOnValue(appkeyval, appitemsitekey, 'Increment');
+        getValue(appkeyval, appitemsitekey);
+        getValue(appkeyval, appitemmodelkey);
+    </script>
+</body>
+</html>

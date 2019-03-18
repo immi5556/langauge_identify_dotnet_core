@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Data\ab\wiki\**" />
+    <EmbeddedResource Remove="Data\ab\wiki\**" />
+    <None Remove="Data\ab\wiki\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core.LanguageIdentifier\Core.LanguageIdentifier.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Data\ab\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Data\ab\ab_abwiki-20181201-abstract_parsed.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\en\en_parsed.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\hi\hi_parsed.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\ta\ta_parsed.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Data\te\te_parsed.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>
