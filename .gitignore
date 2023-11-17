@@ -1,5 +1,7 @@
 .VS
 .vs
+publishprofiles
+*.user
 ###################
 # compiled source #
 ###################
