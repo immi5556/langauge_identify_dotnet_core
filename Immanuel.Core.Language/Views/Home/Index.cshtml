@@ -352,9 +352,9 @@
 
             <div id="tags">
                 @*<span class="tag"><span class="close">&times;</span>such tage</span>
-                    <span class="tag"><span class="close">&times;</span>so color</span>
-                    <span class="tag"><span class="close">&times;</span>many type</span>
-                    <span class="tag"><span class="close">&times;</span>wow</span>*@
+                <span class="tag"><span class="close">&times;</span>so color</span>
+                <span class="tag"><span class="close">&times;</span>many type</span>
+                <span class="tag"><span class="close">&times;</span>wow</span>*@
                 <input id="tag-typer" type="text" placeholder="Add tag..." />
 
             </div>
@@ -705,26 +705,26 @@
                 type: 'POST',
                 success: function (data) {
                     var telt = `<tr style="">
-                                    <td class="lang-prf-l" style="padding:10px;min-width:200px;text-align:left;">
-                                        <div style="display:inline-block; width:100px;">Model Name: </div>` + data.langProfiles[0].ProfileName + `<br />
-                                        <div style="display:inline-block; width:100px;">
-                                            Created By:
-                                        </div>` + data.Email + `<br />
-                                        <div style="display:inline-block; width:100px;">Created At: </div><span class="cvrt-utc">` + data.langProfiles[0].CreatedAt + `</span><br />
-                                        <div style="display:none; width:100px;">Url: </div><a style="text-decoration:none;color:white;display:none;" href="language/profile/` + data.DosName + `/` + ((data.langProfiles[0].Path || '').split('/').length ? (data.langProfiles[0].Path || '').split('/').pop() : (data.langProfiles[0].Path || '').split('\\').pop()) + `">url</a>
-                                        <div style="display:inline-block; width:100px;">Tags: </div>
-                                        [` + (data.langProfiles[0].Tags || []).join(', ') + `]
-                                        <br />
-                                        <div class="input-group url-copy-me" style="display:none;">
-                                            <input class="foo" type="text" value="language/profile/` + data.DosName + `/` + ((data.langProfiles[0].Path || '').split('/').length ? (data.langProfiles[0].Path || '').split('/').pop() : (data.langProfiles[0].Path || '').split('\\').pop()) + `">
-                                            <span class="input-group-button">
-                                                <button style="display:inline-block;width:30px;" class="btn-urlcopy" type="button" data-clipboard-demo="" data-clipboard-target="#foo">
-                                                    <img class="clippy" src="/img/clippy.svg" width="13" alt="Copy to clipboard">
-                                                </button>
-                                            </span>
-                                        </div>
-                                    </td>
-                                </tr>`;
+                                                    <td class="lang-prf-l" style="padding:10px;min-width:200px;text-align:left;">
+                                                        <div style="display:inline-block; width:100px;">Model Name: </div>` + data.langProfiles[0].ProfileName + `<br />
+                                                        <div style="display:inline-block; width:100px;">
+                                                            Created By:
+                                                        </div>` + data.Email + `<br />
+                                                        <div style="display:inline-block; width:100px;">Created At: </div><span class="cvrt-utc">` + data.langProfiles[0].CreatedAt + `</span><br />
+                                                        <div style="display:none; width:100px;">Url: </div><a style="text-decoration:none;color:white;display:none;" href="language/profile/` + data.DosName + `/` + ((data.langProfiles[0].Path || '').split('/').length ? (data.langProfiles[0].Path || '').split('/').pop() : (data.langProfiles[0].Path || '').split('\\').pop()) + `">url</a>
+                                                        <div style="display:inline-block; width:100px;">Tags: </div>
+                                                        [` + (data.langProfiles[0].Tags || []).join(', ') + `]
+                                                        <br />
+                                                        <div class="input-group url-copy-me" style="display:none;">
+                                                            <input class="foo" type="text" value="language/profile/` + data.DosName + `/` + ((data.langProfiles[0].Path || '').split('/').length ? (data.langProfiles[0].Path || '').split('/').pop() : (data.langProfiles[0].Path || '').split('\\').pop()) + `">
+                                                            <span class="input-group-button">
+                                                                <button style="display:inline-block;width:30px;" class="btn-urlcopy" type="button" data-clipboard-demo="" data-clipboard-target="#foo">
+                                                                    <img class="clippy" src="/img/clippy.svg" width="13" alt="Copy to clipboard">
+                                                                </button>
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                </tr>`;
                     $("#tbllst tr:first").before(telt);
                     getValue(appkeyval, appitemmodelkey);
                 }
@@ -776,6 +776,28 @@
         actOnValue(appkeyval, appitemsitekey, 'Increment');
         getValue(appkeyval, appitemsitekey);
         getValue(appkeyval, appitemmodelkey);
+    </script>
+    <script type="module">
+        import { franc, francAll } from './js/franc/franc.bundle.mjs'
+
+        franc('Alle menslike wesens word vry') //=> 'afr'
+        franc('এটি একটি ভাষা একক IBM স্ক্রিপ্ট') //=> 'ben'
+        franc('Alle menneske er fødde til fridom') //=> 'nno'
+
+        franc('') //=> 'und' (language code that stands for undetermined)
+
+        // You can change what’s too short (default: 10):
+        franc('the') //=> 'und'
+        franc('the', { minLength: 3 }) //=> 'sco'
+
+        console.log(francAll('Considerando ser essencial que os direitos humanos'))
+        //=> [['por', 1], ['glg', 0.771284519307895], ['spa', 0.6034146900423971], …123 more items]
+
+        console.log(francAll('Considerando ser essencial que os direitos humanos', { only: ['por', 'spa'] }))
+        //=> [['por', 1 ], ['spa', 0.6034146900423971]]
+
+        console.log(francAll('Considerando ser essencial que os direitos humanos', { ignore: ['spa', 'glg'] }))
+                //=> [['por', 1], ['cat', 0.5367251059928957], ['src', 0.47461899851037015], …121 more items]
     </script>
 </body>
 </html>

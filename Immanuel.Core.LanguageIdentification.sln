@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2018
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Core.LanguageIdentifier", "Core.LanguageIdentifier\Core.LanguageIdentifier.csproj", "{24E9BED9-6724-4C02-8825-A0B018176404}"
 EndProject
@@ -16,6 +16,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestLanguageIdentifier", "Utility\TestLanguageIdentifier\TestLanguageIdentifier.csproj", "{C263BAD8-6BA4-40F3-9DD6-E1CD552475A8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C7A7A072-E691-434A-84ED-3195AFB8A194}"
+	ProjectSection(SolutionItems) = preProject
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		key_points.txt = key_points.txt
+		README.md = README.md
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Immanuel.Core.Language", "Immanuel.Core.Language\Immanuel.Core.Language.csproj", "{AE163500-CA23-44D1-BD63-C69D600A4AE4}"
 EndProject

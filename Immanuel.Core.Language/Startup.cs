@@ -1,15 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Core.LanguageIdentifier;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+﻿using Core.LanguageIdentifier;
 using Microsoft.AspNetCore.Http.Connections;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Immanuel.Core.Language
 {
@@ -33,12 +23,7 @@ namespace Immanuel.Core.Language
             });
 
 
-            services.AddMvc()
-                .AddJsonOptions(opts =>
-                {
-                    opts.SerializerSettings.ContractResolver = new Newtonsoft.Json.Serialization.DefaultContractResolver();
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc();
 
             services.AddCors(options => options.AddPolicy("CorsPolicy",
                builder =>
@@ -48,8 +33,10 @@ namespace Immanuel.Core.Language
                           .AllowAnyOrigin();
                }));
 
-            var li = LanguageIdentifier.New(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Data", "langprofiles-char-1_5-nfc-all.bin.gz"), "Vector", -1);
-            services.AddSingleton<LanguageIdentifier>(li);
+            //var li = LanguageIdentifier.New(System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "Data", "langprofiles-char-1_5-nfc-all.bin.gz"), "Vector", -1);
+            //services.AddSingleton<LanguageIdentifier>(li);
+            //commenting aboce line, and mocking below (18-11-23 - moving to new cshtml)
+            services.AddSingleton<LanguageIdentifier>(new LanguageIdentifierVector());
 
             services.AddCors(options => options.AddPolicy("CorsPolicy",
             builder =>
@@ -66,7 +53,7 @@ namespace Immanuel.Core.Language
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -76,12 +63,14 @@ namespace Immanuel.Core.Language
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
-            app.UseStaticFiles();
-            app.UseCookiePolicy();
-            app.UseCors("CorsPolicy");
-
-            app.UseSignalR((configure) =>
+            app.UseRouting();
+            //app.UseRouter(routes =>
+            //{
+            //    routes.MapRoute(
+            //       name: "default",
+            //       template: "{controller=Home}/{action=Index}/{id?}");
+            //});
+            app.UseEndpoints((configure) =>
             {
                 var desiredTransports =
                     HttpTransportType.WebSockets |
@@ -91,14 +80,15 @@ namespace Immanuel.Core.Language
                 {
                     options.Transports = desiredTransports;
                 });
+                configure.MapControllerRoute(
+               name: "default",
+               pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+            app.UseStaticFiles();
+            app.UseCookiePolicy();
+            app.UseCors("CorsPolicy");
 
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
-            });
+            
         }
     }
 }

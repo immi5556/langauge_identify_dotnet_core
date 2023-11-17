@@ -109,8 +109,8 @@ namespace Core.LanguageIdentifier
         {
             string[] args = new string[]
             {
-                "char",
-                //"word",
+                //"char",
+                "word",
 
                 "1",
                 "5",

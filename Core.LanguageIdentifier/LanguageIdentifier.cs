@@ -29,7 +29,10 @@ namespace Core.LanguageIdentifier
         protected System.Func<IEnumerable<char>, bool, int, int, IEnumerable<string>> tokenizer;
         protected Dictionary<string, double>[] distros;
         protected long[] numOccs;
+        public LanguageIdentifier() // invalid, just adding to solve DI issue
+        {
 
+        }
         public LanguageIdentifier(string distroFile, int cap)
         {
             using (var br = new BinaryReader(new GZipStream(new FileStream(distroFile, FileMode.Open, FileAccess.Read), CompressionMode.Decompress)))

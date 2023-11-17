@@ -1,36 +1,33 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
-    <AspNetCoreHostingModel>inprocess</AspNetCoreHostingModel>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AspNetCoreHostingModel>inprocess</AspNetCoreHostingModel>
+	</PropertyGroup>
 
+	<ItemGroup>
+		<Folder Include="Data\" />
+		<Folder Include="wwwroot\Content\UserData\" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.AspNet.SignalR" Version="2.4.0" />
-    <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0-preview3-35497" PrivateAssets="All" />
-  </ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
 
-
-  <ItemGroup>
-    <Folder Include="Data\" />
-    <Folder Include="wwwroot\Content\UserData\" />
-  </ItemGroup>
-
-
-  <ItemGroup>
-    <ProjectReference Include="..\Core.LanguageIdentifier\Core.LanguageIdentifier.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+	  <ProjectReference Include="..\Core.LanguageIdentifier\Core.LanguageIdentifier.csproj" />
+	</ItemGroup>
 
 
-  <ItemGroup>
-    <None Update="Data\langprofiles-char-1_5-nfc-all.bin.gz">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Data\langprofiles-word-1_5-nfc-10k.bin.gz">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
+	<ItemGroup>
+		<None Update="Data\langprofiles-char-1_5-nfc-all.bin.gz">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+		<None Update="Data\langprofiles-word-1_5-nfc-10k.bin.gz">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 
 </Project>

@@ -8,6 +8,7 @@ namespace Core.LanguageIdentifier
     public class LanguageIdentifierVector : LanguageIdentifier
     {
 
+        public LanguageIdentifierVector() { }
         public LanguageIdentifierVector(string distroFile, int cap) : base(distroFile, cap) { }
 
         /// <summary>
