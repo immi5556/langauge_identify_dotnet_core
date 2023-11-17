@@ -449,11 +449,11 @@
     </div>
     <script src="~/js/signalr.min.js"></script>
     <script>
-        document.getElementById('btnChk').onclick = function () {
-            var tblrest = document.getElementById("restresult");
-            tblrest.innerHTML = "";
-            validate();
-        };
+        //document.getElementById('btnChk').onclick = function () {
+        //    var tblrest = document.getElementById("restresult");
+        //    tblrest.innerHTML = "";
+        //    validate();
+        //};
 
         var validate = function () {
             var formData = new FormData();
@@ -798,6 +798,12 @@
 
         console.log(francAll('Considerando ser essencial que os direitos humanos', { ignore: ['spa', 'glg'] }))
                 //=> [['por', 1], ['cat', 0.5367251059928957], ['src', 0.47461899851037015], …121 more items]
+
+        document.getElementById('btnChk').onclick = function () {
+            var tblrest = document.getElementById("restresult");
+            tblrest.innerHTML = "";
+            tblrest.innerHTML = franc(document.getElementById('inpTxt').value);
+        };
     </script>
 </body>
 </html>
