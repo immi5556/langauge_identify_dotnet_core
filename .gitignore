@@ -51,3 +51,7 @@ UserData/
 ehthumbs.db
 Icon?
 Thumbs.db
+
+.vs
+PublishProfiles
+*.user
